@@ -104,7 +104,7 @@ function addMarkupItems(images) {
       } = img;
       return refs.galleryMarkup.insertAdjacentHTML(
         'beforeend',
-        `<article class="post"><li class="gallery__item">
+        `<li class="gallery__item">
     <div class="card">
       <a class="card__link" href="${largeImageURL}">
       <img class="card__img" src="${webformatURL}" data-source=${largeImageURL} alt="${tags}" loading="lazy" />
@@ -115,7 +115,7 @@ function addMarkupItems(images) {
        <p class="info__item"><b>Downloads</b> ${downloads}</p>
       </div>
     </div>
-    </li></article>`
+    </li>`
       );
     })
     .join('');
