@@ -32,9 +32,7 @@ refs.loadMore.addEventListener('click', loadMore);
 function search(evn) {
   evn.preventDefault();
   const { searchQuery } = evn.currentTarget;
-  // console.log(searchQuery);
   name = searchQuery.value.toLowerCase().trim();
-  // console.log(name);
   clearInput();
 
   if (name === '') {
@@ -53,8 +51,8 @@ function loadMore() {
     per_page: limit,
   });
   const key = `key=27923124-abae4833d2be49fca3c02a38e`;
-  const paramas = `image_type=photo&orientation=horizontal&safesearch=true`;
-  const url = `https://pixabay.com/api/?${key}&q=${name}&${params}&${paramas}`;
+  const paramSerch = `image_type=photo&orientation=horizontal&safesearch=true`;
+  const url = `https://pixabay.com/api/?${key}&q=${name}&${params}&${paramSerch}`;
 
   if (page > totalPages) {
     Notiflix.Notify.info(
