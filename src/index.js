@@ -7,25 +7,29 @@ import { fetchImages } from './js/fetch';
 const refs = {
   form: document.querySelector('#search-form'),
   galleryMarkup: document.querySelector('.gallery__list'),
-  loadMoreBtn: document.querySelector('.load-more'),
-  scroll: document.querySelector('.container'),
+  loadMore: document.querySelector('.load-more'),
 };
+
 const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: `alt`,
   captionDelay: 250,
 });
+
+const limit = 40;
+const totalPages = 500 / limit;
 let name = '';
 let page = 1;
-let limit = 40;
+
 Notiflix.Notify.init({
   position: 'right-top',
   width: '400px',
   fontSize: '25px',
 });
-refs.form.addEventListener('submit', searchImg);
-refs.loadMoreBtn.addEventListener('click', loadMore);
 
-function searchImg(evn) {
+refs.form.addEventListener('submit', search);
+refs.loadMore.addEventListener('click', loadMore);
+
+function search(evn) {
   evn.preventDefault();
   const { searchQuery } = evn.currentTarget;
   // console.log(searchQuery);
@@ -38,11 +42,11 @@ function searchImg(evn) {
     Notiflix.Notify.warning('Please enter request.');
     return;
   }
-  onImagesFetch(name);
+  imagesFetch(name);
   Notiflix.Notify.info(`Hooray! We found 500 images.`);
   evn.currentTarget.reset();
 }
-const totalPages = 500 / limit;
+
 function loadMore() {
   const params = new URLSearchParams({
     page: page,
@@ -71,17 +75,17 @@ function loadMore() {
     });
 }
 
-function onImagesFetch(name) {
+function imagesFetch(name) {
   fetchImages(name)
     .then(pictures => {
       if (pictures.total === 0) {
-        refs.loadMoreBtn.classList.add('is-hidden');
+        refs.loadMore.classList.add('is-hidden');
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         return;
       }
-      refs.loadMoreBtn.classList.remove('is-hidden');
+      refs.loadMore.classList.remove('is-hidden');
       addMarkupItems(pictures.hits);
     })
     .catch(error => console.log(error));
@@ -90,6 +94,7 @@ function onImagesFetch(name) {
 function clearInput() {
   refs.galleryMarkup.innerHTML = '';
 }
+
 function addMarkupItems(images) {
   images
     .map(img => {
