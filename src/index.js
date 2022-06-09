@@ -34,14 +34,13 @@ function search(evn) {
   const { searchQuery } = evn.currentTarget;
   name = searchQuery.value.toLowerCase().trim();
   clearInput();
-
   if (name === '') {
-    refs.loadMoreBtn.classList.add('is-hidden');
+    refs.loadMore.classList.add('is-hidden');
     Notiflix.Notify.warning('Please enter request.');
     return;
   }
   imagesFetch(name);
-  Notiflix.Notify.info(`Hooray! We found 500 images.`);
+
   evn.currentTarget.reset();
 }
 
@@ -54,6 +53,7 @@ function loadMore() {
   const paramSerch = `image_type=photo&orientation=horizontal&safesearch=true`;
   const url = `https://pixabay.com/api/?${key}&q=${name}&${params}&${paramSerch}`;
 
+ 
   if (page > totalPages) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
@@ -70,7 +70,13 @@ function loadMore() {
     .then(pictures => {
       addMarkupItems(pictures.hits);
       page += 1;
+      
+       if (pictures.hits.length < limit) {
+         refs.loadMore.classList.add('is-hidden');
+         return;
+       }
     });
+  
 }
 
 function imagesFetch(name) {
@@ -83,8 +89,13 @@ function imagesFetch(name) {
         );
         return;
       }
+      
       refs.loadMore.classList.remove('is-hidden');
+      Notiflix.Notify.info(`Hooray! We found ${pictures.total} images.`);
       addMarkupItems(pictures.hits);
+      if (pictures.hits.length < limit) {
+        refs.loadMore.classList.add('is-hidden');
+      }
     })
     .catch(error => console.log(error));
 }
