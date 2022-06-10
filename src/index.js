@@ -42,8 +42,9 @@ function search(evn) {
   imagesFetch(name);
 
   evn.currentTarget.reset();
+  
 }
-
+// когла новый запрос кнопка должна обнулятся 
 function loadMore() {
   const params = new URLSearchParams({
     page: page,
@@ -53,7 +54,7 @@ function loadMore() {
   const paramSerch = `image_type=photo&orientation=horizontal&safesearch=true`;
   const url = `https://pixabay.com/api/?${key}&q=${name}&${params}&${paramSerch}`;
 
- 
+  
   if (page > totalPages) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
@@ -69,8 +70,7 @@ function loadMore() {
     })
     .then(pictures => {
       addMarkupItems(pictures.hits);
-      page += 1;
-      
+       page += 1;
        if (pictures.hits.length < limit) {
          refs.loadMore.classList.add('is-hidden');
          return;
@@ -93,6 +93,7 @@ function imagesFetch(name) {
       refs.loadMore.classList.remove('is-hidden');
       Notiflix.Notify.info(`Hooray! We found ${pictures.total} images.`);
       addMarkupItems(pictures.hits);
+      page +=1
       if (pictures.hits.length < limit) {
         refs.loadMore.classList.add('is-hidden');
       }
@@ -102,6 +103,7 @@ function imagesFetch(name) {
 
 function clearInput() {
   refs.galleryMarkup.innerHTML = '';
+  page = 1
 }
 
 function addMarkupItems(images) {
