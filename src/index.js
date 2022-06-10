@@ -44,7 +44,6 @@ function search(evn) {
   evn.currentTarget.reset();
   
 }
-// когла новый запрос кнопка должна обнулятся 
 function loadMore() {
   const params = new URLSearchParams({
     page: page,
